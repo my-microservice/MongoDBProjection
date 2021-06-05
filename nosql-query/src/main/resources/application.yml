@@ -1,0 +1,50 @@
+server:
+  port: 9080
+
+spring:
+  application:
+    name: nosql-sensing
+  kafka:
+    consumer:
+      bootstrap-servers: ${KAFKA_HOST:localhost}:9092
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    properties:
+      interceptor.classes: io.wisoft.eventsourcing.nosql.query.interceptor.KafkaConsumerInterceptor
+  data:
+    mongodb:
+      host: ${NOSQL_HOST:localhost}
+      port: 27017
+      authentication-database: test_db
+      database: test_db
+      username: root
+      password: qwerqwer123
+
+
+axon:
+  serializer:
+    general: xstream
+  axonserver:
+    servers: ${AXON_HOST:192.168.219.113}:8124
+
+eureka:
+  client:
+    enabled: true
+    register-with-eureka: true
+    fetch-registry: true
+    serviceUrl:
+      defaultZone: http://${EUREKA_HOST:localhost}:8761/eureka/
+  instance:
+    prefer-ip-address: true
+
+logging:
+  level:
+    io.wisoft.eventsourcing.nosql.query: debug
+    org.axonframework: debug
+    org.apache.kafka.clients.producer.ProducerConfig: WARN
+    org.apache.kafka.clients.consumer.ConsumerConfig: WARN
+    org.apache.kafka.clients.consumer.internals: WARN
+    org.apache.kafka.common.config.internals: WARN
+    org.apache.kafka.clients.Metadata: WARN
+
+multiplicationHost: http://${GATEWAY_HOST:localhost}:8000/api/v1
